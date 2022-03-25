@@ -104,13 +104,14 @@ class PodcastIndex:
         result_dict = json.loads(result.text)
         return result_dict
 
-    def search(self, query, clean=False):
+    def search(self, query, clean=False, **kwargs):
         """
         Returns all of the feeds that match the search terms in the title, author or owner of the feed.
 
         Args:
             query (str): Query string
             clean (bool): Return only non-explicit feeds
+            kwargs (additional keyword arguments): e.g. max=10
 
         Raises:
             requests.exceptions.HTTPError: When the status code is not OK.
@@ -126,6 +127,7 @@ class PodcastIndex:
         payload = {"q": query}
         if clean:
             payload["clean"] = 1
+        payload.update(kwargs)
 
         # Call Api for result
         return self._make_request_get_result_helper(url, payload)
